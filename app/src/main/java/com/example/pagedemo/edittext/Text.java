@@ -1,7 +1,6 @@
 package com.example.pagedemo.edittext;
 
 
-
 public class Text {
 
     private String title;
@@ -9,6 +8,7 @@ public class Text {
     private String current;
 
     private String[] content;
+
 
     private int id;
 
@@ -59,6 +59,5 @@ public class Text {
         this.content = content;
 
     }
-
 
 }

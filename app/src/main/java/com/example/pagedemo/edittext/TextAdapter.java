@@ -18,7 +18,7 @@ import com.example.pagedemo.R;
 import java.util.List;
 
 
-public class TextAdapter extends BaseAdapter{
+public class TextAdapter extends BaseAdapter  {
 
 
 
@@ -31,6 +31,17 @@ public class TextAdapter extends BaseAdapter{
     private LayoutInflater inflater;
     public int[] colors = { Color.WHITE, Color.rgb(219, 238, 244) };//RGB颜色
 
+    private AddressNoListener addressNoListener;  //定义
+
+    public interface AddressNoListener{
+
+        void addressNo(int position);  //确定传出的值
+
+    }
+
+//    public AddressNoListener getAddressNoListener(){return addressNoListener;}
+    public void setAddressNoListener(AddressNoListener addressNoListener)
+    {this.addressNoListener = addressNoListener;}
 
     public TextAdapter(Context context, List<Text> text,int resource){
 
@@ -39,7 +50,6 @@ public class TextAdapter extends BaseAdapter{
         this.resource=resource;
 
         this.context=context;
-
         inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
@@ -76,6 +86,7 @@ public class TextAdapter extends BaseAdapter{
 
 
 
+
     public View getView(int arg0, View arg1, ViewGroup arg2) {
 
         // TODO Auto-generated method stub
@@ -105,6 +116,13 @@ public class TextAdapter extends BaseAdapter{
                 // TODO Auto-generated method stub
 
                 text.setId(arg2);//每次Spinner中的值改变，Text类中的id就要改变
+                try{
+                    addressNoListener.addressNo(arg2);
+                }catch(NullPointerException e)
+                {
+                    System.out.println("发生异常的原因为 :"+e.getMessage());
+                }
+//                addressNoListener.addressNo(arg2);
 
             }
 
@@ -118,6 +136,9 @@ public class TextAdapter extends BaseAdapter{
 
 
 
+
+
+
         titleView.setText(text.getTitle());
         titleView.setTextSize(13);
         currentView.setText(text.getCurrent());
@@ -125,11 +146,11 @@ public class TextAdapter extends BaseAdapter{
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,text.getContent());
         contentView.setAdapter(adapter);
         arg1.setBackgroundColor(colors[arg0 % 2]);// 每隔item之间颜色不同
+
         return arg1;
 
+
     }
-
-
 
 }
 

@@ -3,6 +3,7 @@ package com.example.pagedemo.edittext;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -235,8 +236,22 @@ public class ListView_SpinnerActivity extends Activity implements View.OnClickLi
     private com.example.pagedemo.edittext.ListViewAdapter mAdapter;
     private List<com.example.pagedemo.edittext.ItemBean> mData;
 
+
+
+
+
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                CallBackUtils.doCallBackMethod((TextAdapter.CallBack) ListView_SpinnerActivity.this);
+//            }
+//        }, 1000);
+//
+
         setContentView(R.layout.main);
         show();
         mListView = (ListView) findViewById(R.id.list_view);
@@ -288,7 +303,6 @@ public class ListView_SpinnerActivity extends Activity implements View.OnClickLi
         Button button20 = (Button) findViewById(R.id.Control_bit9_1);
         button20.setOnClickListener(this);
 //        button.setOnClickListener(new OnClickListener() {
-//
 //            public void onClick(View v) {
 //                ListAdapter listAdapter = listView.getAdapter();
 //                mAdapter.notifyDataSetChanged();//提交输入的数据
@@ -303,16 +317,23 @@ public class ListView_SpinnerActivity extends Activity implements View.OnClickLi
     private void show() {
         List<Text> texts = new ArrayList<Text>();
         for(int i=0;i<13;i++) {//自定义的Text类存数据
-            Text text = new Text();
+            final Text text = new Text();
             text.setTitle(Name[i]);//标题数据
             text.setCurrent(String.valueOf(""));
             text.setId(0);//Spinner的默认选择项
             text.setContent(temp[i]);
             texts.add(text);
             TextAdapter textAdapter = new TextAdapter(ListView_SpinnerActivity.this, texts, R.layout.main_item);//向自定义的Adapter中传值
+            textAdapter.setAddressNoListener(new TextAdapter.AddressNoListener() {
+                public void addressNo(int addressNo) {
+                    //操作
+                    Toast.makeText(ListView_SpinnerActivity.this,"hhh "+addressNo, Toast.LENGTH_SHORT).show();
+                }
+            });
             listView = (ListView) findViewById(R.id.mylist);
             listView.setAdapter(textAdapter);//传值到ListView中
         }
+
     }
 
     @Override
@@ -321,10 +342,11 @@ public class ListView_SpinnerActivity extends Activity implements View.OnClickLi
             case R.id.button1:
                 ListAdapter listAdapter = listView.getAdapter();
                 mAdapter.notifyDataSetChanged();//提交输入的数据
-                for (int i = 0; i < listAdapter.getCount(); i++) {
-                    Text text = (Text) listAdapter.getItem(i);//提交选择的数据
-                    //Toast.makeText(ListView_SpinnerActivity.this,text.getTitle()+" "+text.getContent()[text.getId()], Toast.LENGTH_SHORT).show();
-                }
+//                for (int i = 0; i < listAdapter.getCount(); i++) {
+//                    Text text = (Text) listAdapter.getItem(i);//提交选择的数据
+//                    Toast.makeText(ListView_SpinnerActivity.this,text.getTitle()+" "+text.getContent()[text.getId()], Toast.LENGTH_SHORT).show();
+//                }
+
                 break;
             case R.id.Control_111B:
                 Toast.makeText(this,"运行命令",Toast.LENGTH_SHORT).show();
@@ -385,8 +407,11 @@ public class ListView_SpinnerActivity extends Activity implements View.OnClickLi
                 break;
         }
     }
+    public void doSomeThing(String string) {
 
+        Log.e("========", "拿到CallBackUtils的传递过来的数据=====" + string);
 
+    }
 
 }
 

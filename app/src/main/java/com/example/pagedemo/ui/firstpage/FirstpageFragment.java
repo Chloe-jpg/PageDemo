@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,6 +121,11 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
             case R.id.FirstpageSubmit:
                 Toast.makeText(getContext(),"点击了OneFragment里面的 提交 按钮",Toast.LENGTH_SHORT).show();
                 mAdapter.notifyDataSetChanged();//提交输入的数据
+                ListAdapter listAdapter = listView.getAdapter();
+                for (int i = 0; i < listAdapter.getCount(); i++) {
+                    Text text = (Text) listAdapter.getItem(i);//提交选择的数据
+                    //Toast.makeText(ListView_SpinnerActivity.this,text.getTitle()+" "+text.getContent()[text.getId()], Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.control_111B:
                 Toast.makeText(getContext(),"运行命令",Toast.LENGTH_SHORT).show();
