@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class TextAdapter extends BaseAdapter  {
 
 
-
+    int hhh;
     private List<Text> texts;
 
     private Integer resource;
@@ -36,6 +37,7 @@ public class TextAdapter extends BaseAdapter  {
     public interface AddressNoListener{
 
         void addressNo(int position);  //确定传出的值
+        void titleNo(String title);
 
     }
 
@@ -87,7 +89,7 @@ public class TextAdapter extends BaseAdapter  {
 
 
 
-    public View getView(int arg0, View arg1, ViewGroup arg2) {
+    public View getView(int arg0, View arg1, final ViewGroup arg2) {
 
         // TODO Auto-generated method stub
 
@@ -99,25 +101,27 @@ public class TextAdapter extends BaseAdapter  {
 
         final Text text = texts.get(arg0);
 
-        TextView titleView=(TextView)arg1.findViewById(R.id.title);
+        final TextView titleView=(TextView)arg1.findViewById(R.id.title);
 
-        TextView currentView=(TextView)arg1.findViewById(R.id.current);
-
+        Button currentView=(Button) arg1.findViewById(R.id.current);
+        currentView.setOnClickListener(new View.OnClickListener(){
+            @Override
+             public void onClick(View v){
+                addressNoListener.titleNo(text.getCurrent());
+                addressNoListener.addressNo(hhh);
+            }
+         });
         final Spinner contentView=(Spinner)arg1.findViewById(R.id.content);
 
         contentView.setTag("");
-
         contentView.setOnItemSelectedListener(new OnItemSelectedListener() {
-
             public void onItemSelected(AdapterView<?> arg0, View arg1,
-
                                        int arg2, long arg3) {
-
                 // TODO Auto-generated method stub
-
                 text.setId(arg2);//每次Spinner中的值改变，Text类中的id就要改变
                 try{
-                    addressNoListener.addressNo(arg2);
+                      hhh=arg2;
+//                    addressNoListener.addressNo(arg2);
                 }catch(NullPointerException e)
                 {
                     System.out.println("发生异常的原因为 :"+e.getMessage());

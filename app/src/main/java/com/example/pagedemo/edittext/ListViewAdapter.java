@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,12 +20,24 @@ import java.util.List;
 /**
  * Created by zengd on 2016/8/17 0017.
  */
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter  {
 
     private List<ItemBean> mData;
     private Context mContext;
     private LayoutInflater inflater;
     public int[] colors = { Color.WHITE, Color.rgb(219, 238, 244) };//RGB颜色
+
+    private ListViewAdapter.AddressNoListener addressNoListener;  //定义
+
+
+
+    public interface AddressNoListener{
+        public void clickListener(String Sth);  //确定传出的值
+    }
+    //    public AddressNoListener getAddressNoListener(){return addressNoListener;}
+    public void setAddressNoListener(ListViewAdapter.AddressNoListener addressNoListener)
+    {this.addressNoListener = addressNoListener;}
+
 
     public ListViewAdapter(Context mContext, List<ItemBean> mData) {
         this.mContext = mContext;
@@ -57,7 +70,7 @@ public class ListViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_edittext, null);
             holder = new ViewHolder(convertView);
             holder.edit_name=(TextView)convertView.findViewById(R.id.edit_name);//1
-            holder.edit_current=(TextView)convertView.findViewById(R.id.edit_current) ;
+            holder.edit_current=(Button) convertView.findViewById(R.id.edit_current) ;
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -70,6 +83,12 @@ public class ListViewAdapter extends BaseAdapter {
         holder.edit_name.setText(ItemBean.getName());
         holder.edit_name.setTextSize(13);
         holder.edit_current.setText(ItemBean.getCurrent());
+        holder.edit_current.setOnClickListener(new View.OnClickListener(){
+         @Override
+        public void onClick(View v){
+             addressNoListener.clickListener(itemObj.getName()+":"+itemObj.getText());
+                       }
+    });
         //This is important. Remove TextWatcher first.
         if (holder.editText.getTag() instanceof TextWatcher) {
             holder.editText.removeTextChangedListener((TextWatcher) holder.editText.getTag());
@@ -94,6 +113,7 @@ public class ListViewAdapter extends BaseAdapter {
                     itemObj.setText(s.toString());
                 }
             }
+
         };
 
         holder.editText.addTextChangedListener(watcher);
@@ -104,10 +124,14 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
 
     }
+//    @Override
+//    public void onClick(View view) {
+//        addressNoListener.clickListener("1");
+//    }
 
     private class ViewHolder {
         public TextView edit_name;
-        public TextView edit_current;
+        public Button edit_current;
         private EditText editText;//1
 
         public ViewHolder(View convertView) {

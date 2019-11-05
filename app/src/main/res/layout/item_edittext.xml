@@ -23,7 +23,7 @@
                     android:paddingBottom="8dip"
                     />
 
-                <TextView
+                <Button
                     android:id="@+id/edit_current"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -36,9 +36,6 @@
                     android:paddingTop="8dip"
                     android:paddingBottom="8dip"
                    />
-
-
-
                 <EditText
                     android:id="@+id/edit_text"
                     android:layout_width="150dp"
@@ -53,11 +50,7 @@
 
         </RelativeLayout>
 
-<!--        <EditText-->
-<!--            android:id="@+id/edit_text"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textSize="14sp" />-->
+
 
 
 </LinearLayout>

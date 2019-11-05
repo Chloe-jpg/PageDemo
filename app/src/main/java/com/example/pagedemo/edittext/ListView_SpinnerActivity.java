@@ -261,6 +261,12 @@ public class ListView_SpinnerActivity extends Activity implements View.OnClickLi
             mData.add(new ItemBean( GroupArray[i], "","  "));
         }
         mAdapter = new com.example.pagedemo.edittext.ListViewAdapter(this, mData);
+        mAdapter.setAddressNoListener(new ListViewAdapter.AddressNoListener() {
+            @Override
+            public void clickListener(String v) {
+                Toast.makeText(ListView_SpinnerActivity.this,v, Toast.LENGTH_SHORT).show();
+            }
+        });
         mListView.setAdapter(mAdapter);
         Button button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(this);
@@ -319,22 +325,26 @@ public class ListView_SpinnerActivity extends Activity implements View.OnClickLi
         for(int i=0;i<13;i++) {//自定义的Text类存数据
             final Text text = new Text();
             text.setTitle(Name[i]);//标题数据
-            text.setCurrent(String.valueOf(""));
+            text.setCurrent(String.valueOf(""+i));
             text.setId(0);//Spinner的默认选择项
             text.setContent(temp[i]);
             texts.add(text);
-            TextAdapter textAdapter = new TextAdapter(ListView_SpinnerActivity.this, texts, R.layout.main_item);//向自定义的Adapter中传值
-            textAdapter.setAddressNoListener(new TextAdapter.AddressNoListener() {
-                public void addressNo(int addressNo) {
-                    //操作
-                    Toast.makeText(ListView_SpinnerActivity.this,"hhh "+addressNo, Toast.LENGTH_SHORT).show();
-                }
-            });
-            listView = (ListView) findViewById(R.id.mylist);
-            listView.setAdapter(textAdapter);//传值到ListView中
         }
-
+        TextAdapter textAdapter = new TextAdapter(ListView_SpinnerActivity.this, texts, R.layout.main_item);//向自定义的Adapter中传值
+        textAdapter.setAddressNoListener(new TextAdapter.AddressNoListener() {
+            //操作
+            @Override
+            public void titleNo(String title) {
+                Toast.makeText(ListView_SpinnerActivity.this," "+title, Toast.LENGTH_SHORT).show();
+            }
+            public void addressNo(int addressNo) {
+                Toast.makeText(ListView_SpinnerActivity.this," "+addressNo, Toast.LENGTH_SHORT).show();
+            }
+        });
+        listView = (ListView) findViewById(R.id.mylist);
+        listView.setAdapter(textAdapter);//传值到ListView中
     }
+
 
     @Override
     public void onClick(View view) {

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pagedemo.R;
 import com.example.pagedemo.edittext.ItemBean;
+import com.example.pagedemo.edittext.ListViewAdapter;
 import com.example.pagedemo.edittext.Text;
 import com.example.pagedemo.edittext.TextAdapter;
 
@@ -51,6 +52,12 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
         mData = new ArrayList<ItemBean>();
         mData.add(new ItemBean( "Digital reference frequency", "","  "));
         mAdapter = new com.example.pagedemo.edittext.ListViewAdapter(this.getActivity(), mData);
+        mAdapter.setAddressNoListener(new ListViewAdapter.AddressNoListener() {
+            @Override
+            public void clickListener(String v) {
+                Toast.makeText(getContext(),v, Toast.LENGTH_SHORT).show();
+            }
+        });
         mListView.setAdapter(mAdapter);
         Button button0 = (Button) getActivity().findViewById(R.id.FirstpageMore);
         button0.setOnClickListener(this);
@@ -101,11 +108,21 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
         for(int i=0;i<2;i++) {//自定义的Text类存数据
             Text text = new Text();
             text.setTitle(Name[i]);//标题数据
-            text.setCurrent(String.valueOf(""));
+            text.setCurrent(String.valueOf(""+i));
             text.setId(0);//Spinner的默认选择项
             text.setContent(temp[i]);
             texts.add(text);
             TextAdapter textAdapter = new TextAdapter(this.getActivity(), texts, R.layout.main_item);//向自定义的Adapter中传值
+            textAdapter.setAddressNoListener(new TextAdapter.AddressNoListener() {
+                //操作
+                @Override
+                public void titleNo(String title) {
+                    Toast.makeText(getContext()," "+title, Toast.LENGTH_SHORT).show();
+                }
+                public void addressNo(int addressNo) {
+                    Toast.makeText(getContext()," "+addressNo, Toast.LENGTH_SHORT).show();
+                }
+            });
             listView = (ListView) getActivity().findViewById(R.id.mylist0);
             listView.setAdapter(textAdapter);//传值到ListView中
         }}
