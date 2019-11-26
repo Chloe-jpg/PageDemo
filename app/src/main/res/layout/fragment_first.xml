@@ -6,14 +6,15 @@
     android:layout_height="fill_parent">
 
 <LinearLayout
+    android:id="@+id/myfragment1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="60dp"
+    android:paddingBottom="60dp"
     android:orientation="vertical"
-    android:background="#DBEEF4"
+
     >
 
 <!--    <View-->
@@ -29,7 +30,7 @@
 
         android:layout_height="wrap_content"
 
-        ></ListView>
+        />
 
     <ListView
         android:id="@+id/list_view0"
@@ -82,7 +83,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Stop mode 0"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:background="@drawable/button"/>
 
         <Button
             android:id="@+id/control_101B"
@@ -90,7 +92,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Stop mode 1"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:background="@drawable/button"/>
 
     </LinearLayout>
     <TextView
@@ -111,7 +114,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Forward"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:background="@drawable/button"/>
 
         <Button
             android:id="@+id/control_bit3_1"
@@ -119,7 +123,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Backward"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:background="@drawable/button"/>
     </LinearLayout>
 
     <TextView
@@ -140,7 +145,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Fault reset enable"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:background="@drawable/button"/>
 
         <Button
             android:id="@+id/control_bit9_1"
@@ -148,16 +154,24 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Fault reset disable"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:background="@drawable/button"/>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="#00A7A5A5"
+
+        />
     <Button
         android:id="@+id/FirstpageMore"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="More"
         tools:layout_editor_absoluteX="153dp"
         tools:layout_editor_absoluteY="170dp"
         android:textAllCaps="false"
+        android:background="@drawable/button"
          />
 
 

@@ -59,7 +59,7 @@ public class SecondpageFragment extends Fragment {
 
         //设置表格标题的背景颜色
         ViewGroup tableTitle = (ViewGroup)getActivity(). findViewById(R.id.table_title);
-        tableTitle.setBackgroundColor(Color.rgb(219, 238, 244));
+        tableTitle.setBackgroundColor(Color.WHITE);
         //！！！数据每次点击后都应该刷新数据
         list0 = new ArrayList<Parameter>();
         for(int i=0;i<9;i++){
@@ -179,7 +179,7 @@ public class SecondpageFragment extends Fragment {
                         }
                     }
                 }catch(Exception e){
-                        util.saveErrorLog(getContext(),e.toString());
+//                        util.saveErrorLog(getContext(),e.toString());
                 }
 
                     adapter.notifyDataSetChanged();
@@ -191,7 +191,7 @@ public class SecondpageFragment extends Fragment {
 
             else if(action.equals(BLEService.ACTION_GATT_DISCONNECTED)) {
                 util.centerToast(getContext(),"Bluetooth disconnected!",0);
-                util.saveErrorLog(getContext(),"jieshoucuowu");
+//                util.saveErrorLog(getContext(),"jieshoucuowu");
             }
             else if(action.equals(BLEService.ACTION_ERROR_CODE)){
                 util.centerToast(getContext(),"Read error:"
