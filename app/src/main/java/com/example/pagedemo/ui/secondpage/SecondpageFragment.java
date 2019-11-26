@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v7.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.pagedemo.BluetoothService.BLEService;
@@ -29,6 +31,8 @@ import com.example.pagedemo.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.pagedemo.MyApplication.getContext;
 
 public class SecondpageFragment extends Fragment {
     private View view;//得到碎片对应的布局文件,方便后续使用

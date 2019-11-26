@@ -2,14 +2,19 @@ package com.example.pagedemo.ui.fourthpage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v7.app.AppCompatActivity;
 import com.example.pagedemo.R;
+
+import static com.example.pagedemo.MyApplication.getContext;
+
 public class FourthpageFragment extends Fragment {
     private View view;//得到碎片对应的布局文件,方便后续使用
     //记住一定要重写onCreateView方法

@@ -5,4 +5,5 @@
     <color name="colorAccent">#000000</color>
     <color name="grayer">#858585</color>
     <color name="gray">#DDD7D7</color>
+    <color name="colorTabText">#73C53D</color>
 </resources>
