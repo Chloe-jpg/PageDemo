@@ -34,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kinco.MotorApp.BluetoothService.BLEService;
+import com.kinco.MotorApp.MainActivity;
+import com.kinco.MotorApp.alertdialog.LoadingDialog;
 import com.kinco.MotorApp.alertdialog.PasswordDialog;
 import com.kinco.MotorApp.util;
 import com.kinco.MotorApp.R;
@@ -58,7 +60,8 @@ public class DeviceList extends AppCompatActivity{
     private Button BLEScan;
     private Switch Filter;
     private PasswordDialog dialog;
-    private String password="";
+    private LoadingDialog loadingDialog;
+    private boolean firstTime;
     private boolean mScanning;//是否正在搜索
     private Handler mHandler;
     private TextView count;
@@ -71,7 +74,7 @@ public class DeviceList extends AppCompatActivity{
     ArrayList<String> connected_list = new ArrayList<String>();
     private LocalReceiver localReceiver;
     private BLEService mBluetoothLeService;
-    private String editPassword;
+    private String editPassword="";
 
     private void initUI(){
         setContentView(R.layout.device_list);
@@ -131,7 +134,7 @@ public class DeviceList extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-//        try {
+        try {
             initUI();
             getBlePermissionFromSys();
             Intent BLEIntent = new Intent(this, BLEService.class);
@@ -140,6 +143,9 @@ public class DeviceList extends AppCompatActivity{
             localReceiver = new LocalReceiver();
             localBroadcastManager = LocalBroadcastManager.getInstance(this);
             localBroadcastManager.registerReceiver(localReceiver, util.makeGattUpdateIntentFilter());
+        }catch (Exception e){
+            Log.d(TAG,e.toString());
+        }
     }
     @Override
     protected void onDestroy(){
@@ -173,9 +179,13 @@ public class DeviceList extends AppCompatActivity{
                 connected_list.clear();
                 mPairedDevicesArrayAdapter.notifyDataSetChanged();
             }
-            Toast toast = Toast.makeText(DeviceList.this,"Connecting...please wait", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.show();
+            loadingDialog = new LoadingDialog(DeviceList.this,"","Connecting...please wait",true);
+            loadingDialog.setOnClickCancelListener(new LoadingDialog.OnClickCancelListener(){
+                public void onNegativeClick(){
+                    loadingDialog.gone();
+                    mBluetoothLeService.close();
+                }
+            });
             mBluetoothLeService.connect(address);
 
         }
@@ -243,18 +253,25 @@ public class DeviceList extends AppCompatActivity{
                         toast.show();
                         mBluetoothLeService.slaveAddress = slaveAddress;
                         try {
+                            loadingDialog.gone();
                             mBluetoothLeService.slaveCode = util.intToByte2(Integer.valueOf(slaveAddress.substring(slaveAddress.indexOf("_") + 1, slaveAddress.indexOf("\n"))))[1];
                             Log.d(TAG,slaveAddress.substring(slaveAddress.indexOf("_")+1,slaveAddress.indexOf("\n")));
                             connected_list.clear();
                             connected_list.add(slaveAddress);
                             mPairedDevicesArrayAdapter.notifyDataSetChanged();
-                            showPasswordDialog();
-                            //finish();
+                            Intent activityIntent = new Intent(DeviceList.this, MainActivity.class);
+                            startActivity(activityIntent);
+                            finish();
+                            //showPasswordDialog();
+
+
+
                         }catch(Exception e){
                             util.centerToast(DeviceList.this,"Failed to get SlaveAddress",0);
                             e.printStackTrace();
                             Log.d(TAG,e.toString());
                         }
+                        //debug();
 
                     }
                 });
@@ -262,6 +279,8 @@ public class DeviceList extends AppCompatActivity{
 
             }
             else if(action.equals(BLEService.ACTION_GATT_DISCONNECTED)){
+                if(!(loadingDialog==null))
+                    loadingDialog.gone();
                 Toast toast = Toast.makeText(getApplicationContext(),"Connection failed!",Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER,0,0);
                 toast.show();
@@ -277,6 +296,8 @@ public class DeviceList extends AppCompatActivity{
                     if (!(dialog == null)) {
                         util.centerToast(DeviceList.this, "Correct!", 0);
                         dialog.gone();
+                        Intent activityIntent = new Intent(DeviceList.this, MainActivity.class);
+                        startActivity(activityIntent);
                         finish();
                     }
                 }else
@@ -317,24 +338,16 @@ public class DeviceList extends AppCompatActivity{
 
                   }
               });
-              //dialog.show();
-//            final PasswordDialog dialog = new PasswordDialog(DeviceList.this, mBluetoothLeService);
-//            dd = dialog.show();
-//            field = dd.getClass().getSuperclass().getDeclaredField("mShowing");
-//            mHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        if (password.equals(dialog.getPassword()))
-//                            field.set(dd, true);
-//                    }catch (Exception e){}
-//                }
-//            },1000);
-//            field.setAccessible(true);
-//            field.set(dd, false);// false表示不关闭
         }catch(Exception e){
             Log.d(TAG,"PasswordDialog error");
         }
+    }
+
+    private void debug(){
+        mBluetoothLeService.slaveCode=0x05;
+        Intent activityIntent = new Intent(DeviceList.this, MainActivity.class);
+        startActivity(activityIntent);
+        finish();
     }
 
 
