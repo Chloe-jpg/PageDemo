@@ -1,8 +1,5 @@
 package com.kinco.MotorApp.ui.firstpage;
 
-
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.kinco.MotorApp.DemoFragment;
+import com.kinco.MotorApp.alertdialog.SetDataDialog;
 import com.kinco.MotorApp.edittext.ItemBean;
 import com.kinco.MotorApp.edittext.ListViewAdapter;
 import com.kinco.MotorApp.edittext.Text;
@@ -54,6 +52,8 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
     private BLEService mBluetoothLeService;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver receiver=new LocalReceiver();
+    private SetDataDialog setDatadialog;
+    private String editSetData="";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initService();
         show();
         //输入型
         mListView = (ListView) getActivity().findViewById(R.id.list_view0);
@@ -72,8 +71,9 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
         mAdapter = new ListViewAdapter(this.getActivity(), mData);
         mAdapter.setAddressNoListener(new ListViewAdapter.AddressNoListener() {
             @Override
-            public void clickListener(String address, String value) {
+            public void clickListener(String address, String value,String name,String Unit,String Hint) {
                 mBluetoothLeService.writeData(address,value);
+                showSetDataDialog();
             }
         });
         mListView.setAdapter(mAdapter);
@@ -104,7 +104,8 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
         Intent BLEIntent = new Intent(getActivity(),BLEService.class);
         getActivity().bindService(BLEIntent,connection, Context.BIND_AUTO_CREATE);
         localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
-        localBroadcastManager.registerReceiver(receiver,util.makeGattUpdateIntentFilter());
+        //if(!util.isRegister(localBroadcastManager,BLEService.ACTION_DATA_AVAILABLE))
+            localBroadcastManager.registerReceiver(receiver,util.makeGattUpdateIntentFilter());
     }
     private void show() {
         List<Text> texts = new ArrayList<Text>();
@@ -130,7 +131,25 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
             });
             listView = (ListView) getActivity().findViewById(R.id.mylist0);
             listView.setAdapter(textAdapter);//传值到ListView中
-            util.setListViewHeightBasedOnChildren(listView);
+            //util.setListViewHeightBasedOnChildren(listView);
+        }
+    }
+    private void showSetDataDialog(){
+        try {
+            setDatadialog = new SetDataDialog(this.getActivity(),"Digital reference frequency","HZ","0.0~300.00");
+            setDatadialog.setOnClickBottomListener(new SetDataDialog.OnClickBottomListener(){
+                @Override
+                public void onPositiveClick() {
+                    editSetData = setDatadialog.getSetData();
+                }
+                @Override
+                public void onNegativeClick() {
+                    setDatadialog.gone();
+
+                }
+            });
+        }catch(Exception e){
+            Log.d(TAG,"SetDataDialog error");
         }
     }
 
@@ -188,9 +207,17 @@ public class FirstpageFragment extends Fragment implements View.OnClickListener 
     };
 
     @Override
-    public void onPause() {
-        super.onPause();
-        localBroadcastManager.unregisterReceiver(receiver);
+    public void onStart() {
+        super.onStart();
+        initService();
+        util.centerToast(getContext(),"1被开启",0);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(!(localBroadcastManager==null))
+            localBroadcastManager.unregisterReceiver(receiver);
     }
 
     public FirstpageFragment newInstance(int i) {
